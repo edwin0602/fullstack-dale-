@@ -1,0 +1,94 @@
+<div class="wrapper">
+    <div class="page-header page-header-xs" data-parallax="true"
+        style="background-image: url('./assets/img/fabio-mangione.jpg');">
+        <div class="filter"></div>
+    </div>
+    <div class="section profile-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="name">
+                        <h4 class="title">Listado de Productos</h4>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Valor</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of productos; index as i">
+                                <th scope="row">{{ i + 1 }}</th>
+                                <td>{{ item.nombre }}</td>
+                                <td>{{ item.valorUnitario | currency }}</td>
+                                <td style="text-align: center;">
+                                    <a (click)="openModal(editModal, item)"
+                                        class="btn btn-link btn-default btn-table">Editar</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-4">
+                    <h4 class="title">Registrar producto</h4>
+
+                    <form #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
+                        <fieldset [disabled]="!canSubmit">
+                            <div class="form-group">
+                                <label>Nombre</label>
+                                <input name="nombre" type="text" class="form-control" ngModel>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Precio</label>
+                                <input name="valorUnitario" type="number" class="form-control" ngModel>
+                            </div>
+
+                            <hr>
+
+                            <button type="submit" class="btn btn-outline-danger btn-round">
+                                Guardar
+                            </button>
+                        </fieldset>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #editModal let-modal>
+    <form #formEdit="ngForm" (ngSubmit)="onSubmitUpdate(formEdit)" novalidate>
+        <fieldset [disabled]="!canSubmit">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-basic-title">Actualizar producto</h5>
+            </div>
+            <div class="modal-body">
+
+                <input name="id" [(ngModel)]="productoSeleccionado.id" hidden>
+
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input name="nombre" type="text" class="form-control" [(ngModel)]="productoSeleccionado.nombre">
+                </div>
+
+                <div class="form-group">
+                    <label>Precio</label>
+                    <input name="valorUnitario" type="number" class="form-control" [(ngModel)]="productoSeleccionado.valorUnitario">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-round"
+                    (click)="modal.close('Save click')">Cerrar</button>
+                <button type="submit" class="btn btn-outline-danger btn-round">
+                    Actualizar
+                </button>
+            </div>
+        </fieldset>
+    </form>
+</ng-template>

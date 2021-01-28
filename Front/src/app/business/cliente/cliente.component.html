@@ -1,0 +1,121 @@
+<div class="wrapper">
+    <div class="page-header page-header-xs" data-parallax="true"
+        style="background-image: url('./assets/img/fabio-mangione.jpg');">
+        <div class="filter"></div>
+    </div>
+    <div class="section profile-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="name">
+                        <h4 class="title">Listado de Clientes</h4>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Cedula</th>
+                                <th scope="col">Nombre completo</th>
+                                <th scope="col">Telefono</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of clientes; index as i">
+                                <th scope="row">{{ i + 1 }}</th>
+                                <td>{{ item.cedula }}</td>
+                                <td>{{ item.nombreCompleto }}</td>
+                                <td>{{ item.telefono }}</td>
+                                <td style="text-align: center;">
+                                    <a (click)="openModal(editModal, item)"
+                                        class="btn btn-link btn-default btn-table">Editar</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-4">
+                    <h4 class="title">Nuevo Cliente</h4>
+
+                    <form #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate>
+                        <fieldset [disabled]="!canSubmit">
+                            <div class="form-group">
+                                <label>Cedula</label>
+                                <input name="cedula" type="text" class="form-control" ngModel>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label>Nombres</label>
+                                    <input name="nombre" type="text" class="form-control" ngModel>
+                                </div>
+
+                                <div class="form-group col">
+                                    <label>Apellidos</label>
+                                    <input name="apellido" type="text" class="form-control" ngModel>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Telefono</label>
+                                <input name="telefono" type="text" class="form-control" ngModel>
+                            </div>
+
+                            <hr>
+
+                            <button type="submit" class="btn btn-outline-danger btn-round">
+                                Guardar
+                            </button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #editModal let-modal>
+    <form #formEdit="ngForm" (ngSubmit)="onSubmitUpdate(formEdit)" novalidate>
+        <fieldset [disabled]="!canSubmit">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-basic-title">Actualizar informacion</h5>
+            </div>
+            <div class="modal-body">
+
+                <input name="id" [(ngModel)]="clienteSeleccionado.id" hidden>
+
+                <div class="form-group">
+                    <label>Documento</label>
+                    <input name="cedula" type="text" class="form-control" [readonly]="'true'" [(ngModel)]="clienteSeleccionado.cedula">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label>Nombres</label>
+                        <input name="nombre" type="text" class="form-control" [(ngModel)]="clienteSeleccionado.nombre">
+                    </div>
+
+                    <div class="form-group col">
+                        <label>Apellidos</label>
+                        <input name="apellido" type="text" class="form-control"
+                            [(ngModel)]="clienteSeleccionado.apellido">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Telefono</label>
+                    <input name="telefono" type="text" class="form-control" [(ngModel)]="clienteSeleccionado.telefono">
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-round"
+                    (click)="modal.close('Save click')">Cerrar</button>
+                <button type="submit" class="btn btn-outline-danger btn-round">
+                    Actualizar
+                </button>
+            </div>
+        </fieldset>
+    </form>
+</ng-template>

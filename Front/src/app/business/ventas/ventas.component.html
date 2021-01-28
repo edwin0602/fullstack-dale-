@@ -1,0 +1,139 @@
+<div class="wrapper">
+    <div class="page-header page-header-xs" data-parallax="true"
+        style="background-image: url('./assets/img/fabio-mangione.jpg');">
+        <div class="filter"></div>
+    </div>
+    <div class="section profile-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="name">
+                        <h4 class="title">Listado de Productos</h4>
+                    </div>
+                    <br>
+                    <form #f="ngForm" (ngSubmit)="onAddItem(f)" novalidate>
+                        <fieldset [disabled]="!canSubmit">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+                                        <label>Producto</label>
+                                        <ng-autocomplete [data]="productos" name="producto" [(ngModel)]="producto"
+                                            [searchKeyword]="'nombre'" [itemTemplate]="itemTemplate"
+                                            placeholder="Escriba el nombre del producto">
+                                        </ng-autocomplete>
+
+                                        <ng-template #itemTemplate let-item>
+                                            <a [innerHTML]="item.nombre"></a>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label>Cantidad</label>
+                                        <input name="cantidad" type="number" class="form-control" ngModel>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group">
+                                        <label>&nbsp;&nbsp;</label>
+                                        <button type="submit" class="btn btn-outline-danger btn-round btn-block">
+                                            Añadir
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Valor Unit.</th>
+                                <th scope="col">Valor Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of factura.detalleFactura; index as i">
+                                <td style="text-align: center;">
+                                    <i class="fa fa-trash" style="color: #dc3545"
+                                        (click)="deleteIten(item.producto.id)"></i>
+                                </td>
+                                <th scope="row">{{ i + 1 }}</th>
+                                <td>{{ item.producto.nombre }}</td>
+                                <td>{{ item.cantidad }}</td>
+                                <td>{{ item.producto.valorUnitario | currency }}</td>
+                                <td>{{ item.valor | currency }}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4"></td>
+                                <td>
+                                    <b>Total: </b>
+                                </td>
+                                <td>
+                                    {{ factura.valorTotal | currency }}
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="name">
+                        <h4 class="title">Cliente</h4>
+                    </div>
+
+                    <form #fac="ngForm" (ngSubmit)="onSubmit(fac)" novalidate>
+                        <fieldset [disabled]="!canSubmit">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="form-group">
+                                        <ng-autocomplete [data]="clientes" [searchKeyword]="'nombreCompleto'"
+                                            (selected)='selectCliente($event)' [itemTemplate]="itemTemplateClient"
+                                            placeholder="Escriba el nombre del cliente">
+                                        </ng-autocomplete>
+
+                                        <ng-template #itemTemplateClient let-item>
+                                            <a href="javascript:void(0)">
+                                                <span [innerHTML]="item.nombreCompleto"></span>,
+                                                <span [innerHTML]="item.cedula"></span>
+                                            </a>
+                                        </ng-template>
+
+                                        <p *ngIf="factura.cliente.cedula" class="text-muted" style="margin-top: 5px;">
+                                            <small>Documento: {{factura.cliente.cedula}} - Telefono:
+                                                {{factura.cliente.telefono}}</small>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-outline-danger btn-round btn-block">
+                                            Comprar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #confirmModal let-modal>
+    <div class="modal-body">
+        Factura creada exitosamente!
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-round" (click)="modal.close('Save click')">Aceptar</button>
+    </div>
+</ng-template>
